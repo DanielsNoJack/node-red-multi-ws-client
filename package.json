@@ -1,0 +1,21 @@
+{
+  "name": "node-red-multi-ws-client",
+  "version": "0.0.2",
+  "description": "Node-RED node for connecting to multiple websocket servers with shared auth and init message",
+  "keywords": [
+    "node-red",
+    "websocket",
+    "ws",
+    "multi-client"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.18.3"
+  },
+  "node-red": {
+    "nodes": {
+      "multi-ws-client": "multi-ws-client.js"
+    }
+  }
+}
+

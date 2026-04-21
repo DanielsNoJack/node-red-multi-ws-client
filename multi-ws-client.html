@@ -1,0 +1,117 @@
+<script type="text/javascript">
+    RED.nodes.registerType('multi-ws-client', {
+        category: 'network',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            port: { value: "" },
+            path: { value: "" },
+            autoReconnect: { value: true },
+            reconnectMs: { value: 5000, validate: RED.validators.number() },
+            headers: { value: "" },
+            initMessage: { value: "" },
+            parseJson: { value: false }
+        },
+        credentials: {
+            username: { type: "text" },
+            password: { type: "password" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "bridge.svg",
+        label: function () {
+            return this.name || "multi-ws-client";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="multi-ws-client">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-port"><i class="fa fa-plug"></i> Default port</label>
+        <input type="text" id="node-input-port" placeholder="8080">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-path"><i class="fa fa-random"></i> Default path</label>
+        <input type="text" id="node-input-path" placeholder="/ws">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-username"><i class="fa fa-user"></i> Basic auth user</label>
+        <input type="text" id="node-input-username" placeholder="admin">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock"></i> Basic auth password</label>
+        <input type="password" id="node-input-password" placeholder="">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-headers"><i class="fa fa-list"></i> Extra headers JSON</label>
+        <input type="text" id="node-input-headers" placeholder='{"X-API-Key":"abc"}'>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-initMessage"><i class="fa fa-send"></i> Init message</label>
+        <input type="text" id="node-input-initMessage" placeholder='{"cmd":"subscribe","channel":"events"}'>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-autoReconnect"><i class="fa fa-refresh"></i> Auto reconnect</label>
+        <input type="checkbox" id="node-input-autoReconnect" style="width:auto;">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-reconnectMs"><i class="fa fa-clock-o"></i> Reconnect ms</label>
+        <input type="text" id="node-input-reconnectMs">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-parseJson"><i class="fa fa-code"></i> Parse JSON input</label>
+        <input type="checkbox" id="node-input-parseJson" style="width:auto;">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="multi-ws-client">
+    <p>Connects to multiple websocket servers at once.</p>
+
+    <p>Send <code>msg.payload</code> as an array of IPs or websocket URLs to define the active connections.</p>
+
+    <p>Examples:</p>
+    <pre>[
+  "192.168.1.10",
+  "192.168.1.11",
+  "ws://192.168.1.12:8080/ws"
+]</pre>
+
+    <p>When a connection opens, the node optionally sends the same init message to every server.</p>
+
+    <p>Received messages are emitted as:</p>
+    <ul>
+        <li><code>msg.topic</code> = source IP/hostname</li>
+        <li><code>msg.url</code> = full websocket URL</li>
+        <li><code>msg.payload</code> = received data</li>
+    </ul>
+
+    <p>To send to one destination:</p>
+    <pre>{
+  "target": "192.168.1.10",
+  "payload": "hello"
+}</pre>
+
+    <p>To broadcast to all connected servers:</p>
+    <pre>{
+  "payload": "hello all"
+}</pre>
+
+    <p>To resend init message:</p>
+    <pre>{
+  "command": "send_init"
+}</pre>
+</script>
+
